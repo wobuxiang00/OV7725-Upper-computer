@@ -12,6 +12,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+/*
+ * 传图协议为，先发送“H:”为高范围0-240，“W:”为宽，范围0-320
+ * 发送“data:”为标记图片传输开始，发送“L”为列开始，按列输出像素值且每列以“/n”结尾
+*/
 namespace OV7670
 {
     public partial class MainFrm : Form

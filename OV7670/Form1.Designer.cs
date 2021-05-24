@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainFrm));
             this.gbPicture = new System.Windows.Forms.GroupBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -56,6 +57,7 @@
             this.usart_send_Ritchbox = new System.Windows.Forms.RichTextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.usart_get_Ritchbox = new System.Windows.Forms.RichTextBox();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.gbPicture.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbImage1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbImage)).BeginInit();
@@ -325,6 +327,10 @@
             this.usart_get_Ritchbox.TabIndex = 19;
             this.usart_get_Ritchbox.Text = "";
             // 
+            // timer1
+            // 
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
             // MainFrm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
@@ -378,6 +384,7 @@
         private System.Windows.Forms.RichTextBox usart_send_Ritchbox;
         private System.Windows.Forms.Button usart_data_clear;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Timer timer1;
     }
 }
 

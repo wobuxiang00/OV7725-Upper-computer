@@ -11,7 +11,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using System.Collections;
 /*
  * 传图协议为，先发送“H:”为高范围0-240，“W:”为宽，范围0-320
  * 发送“data:”为标记图片传输开始，发送“L”为列开始，按列输出像素值且每列以“/n”结尾
@@ -27,6 +27,7 @@ namespace OV7670
         Bitmap OvImage;
         int pic_w=0, pic_h=0;
         int frame = 0;
+        ArrayList data = new ArrayList();
         public MainFrm()
         {
             InitializeComponent();
@@ -107,6 +108,7 @@ namespace OV7670
                     this.cbbSerialID.Enabled = false;
                     this.cbbStopBits.Enabled = false;
                     this.btnSave.Enabled = true;
+                    this.timer1.Enabled = true;
                     isOpen = true;
                 }
                 else
@@ -120,6 +122,7 @@ namespace OV7670
                     this.cbbDataBits.Enabled = true;
                     this.cbbSerialID.Enabled = true;
                     this.cbbStopBits.Enabled = true;
+                    this.timer1.Enabled = false;
                     //重设标志,重设串口的信息
                     isSetProperty = false;
                     Thread.Sleep(100);
@@ -212,10 +215,12 @@ namespace OV7670
                 {
                     //从串口获取图片尺寸并创建图片
                     size = sp.ReadLine();
+                    /*
                     if (start != true)
                     {
                         this.usart_get_Ritchbox.Text += (size + "\n");
                     }
+                    */
                     if (size.StartsWith("H"))
                     {
                         pic_h = Convert.ToInt32(size.Substring(2));
@@ -225,6 +230,10 @@ namespace OV7670
                     {
                         pic_w = Convert.ToInt32(size.Substring(2));
                         show_log("图片宽" + size.Substring(2) + "\n");
+                    }
+                    if (!start)
+                    {
+                        this.data.Add(size + "\n");
                     }
                     if (pic_h == 0 || pic_w == 0) return;
                     else
@@ -242,7 +251,6 @@ namespace OV7670
                         show_log("检测到data\n");
                         start = true;
                     }
-                    
                     //开始读取数据
                     if (start)
                     {
@@ -429,6 +437,23 @@ namespace OV7670
         private void usart_data_clear_Click(object sender, EventArgs e)
         {
             this.usart_get_Ritchbox.Text = "";
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            try
+            {
+                foreach (string da in data)
+                {
+                    this.usart_get_Ritchbox.Text += da;
+                }
+                data.Clear();
+            }
+            catch (Exception ex)
+            {
+                show_log("\n" + ex);
+                return;
+            }
         }
 
         void save_pic(Bitmap bitmap,string name)
